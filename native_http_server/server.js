@@ -1,16 +1,16 @@
 import http from "http"
+import { User } from "./user.controller.js"
 
 const hostname = "127.0.0.1"
 const port = 3000
-const user = {
-  name: "Sarvar",
-  age: 22,
-}
+
 //endpoints
 const routes = {
   "/": "<h1>Hello </h1>",
-  "/api/user": user,
+  "/api/user": new User(),
 }
+let data = new User()
+data["GET"]
 //types for serializer
 const types = {
   object: JSON.stringify,
@@ -19,7 +19,9 @@ const types = {
   function: (fn, req, res) => JSON.stringify(fn(req, res)),
 }
 const server = http.createServer((req, res) => {
-  const data = routes[req.url]
+  let data = routes[req.url]
+  const method = req.method
+  data = data[method]
   const type = typeof data
   const serializer = types[type]
   const result = serializer(data, req, res)
