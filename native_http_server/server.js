@@ -9,8 +9,6 @@ const routes = {
   "/": "<h1>Hello </h1>",
   "/api/user": new User(),
 }
-let data = new User()
-data["GET"]
 //types for serializer
 const types = {
   object: JSON.stringify,
