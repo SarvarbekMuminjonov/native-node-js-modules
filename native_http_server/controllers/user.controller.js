@@ -4,8 +4,9 @@ const user = {
 }
 
 export class User {
-  GET() {
-    return user
+  GET(req, res) {
+    res.statusCode = 200
+    res.end(JSON.stringify(user))
   }
   POST(req, res) {}
 }

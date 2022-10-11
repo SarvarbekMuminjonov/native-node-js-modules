@@ -1,5 +1,5 @@
 import http from "http"
-import { User } from "./user.controller.js"
+import { User } from "./controllers/user.controller.js"
 
 const hostname = "127.0.0.1"
 const port = 3000
@@ -10,20 +10,22 @@ const routes = {
   "/api/user": new User(),
 }
 //types for serializer
-const types = {
-  object: JSON.stringify,
-  string: (s) => s,
-  undefined: () => "not found",
-  function: (fn, req, res) => JSON.stringify(fn(req, res)),
-}
+// const types = {
+//   object: JSON.stringify,
+//   string: (s) => s,
+//   number: (n) => n.toString(),
+//   undefined: () => "not found",
+//   function: (fn, req, res) => JSON.stringify(fn(req, res)),
+// }
 const server = http.createServer((req, res) => {
   let data = routes[req.url]
+  if (data === undefined) {
+    res.statusCode = 404
+    return res.end("<h1>Somenting went wrong</h1>")
+  }
   const method = req.method
   data = data[method]
-  const type = typeof data
-  const serializer = types[type]
-  const result = serializer(data, req, res)
-  res.end(result)
+  data(req, res)
 })
 
 server.listen(port, hostname, () => {
